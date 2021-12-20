@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Button } from '@material-ui/core';
+import { PayPalButton } from 'react-paypal-button-v2';
+// import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
+
 const Basket = (props) => {
   const { cartItems, onAdd, onRemove } = props;
   const itemsPrice = cartItems.reduce((a, c) => a + c.price * c.qty, 0);
   const taxPrice = itemsPrice * 0.14;
   const shippingPrice = itemsPrice > 2000 ? 0 : 50;
   const totalPrice = itemsPrice + taxPrice + shippingPrice;
+  // const [checkout, setCheckout] = useState(false);
+
+  // const initialOptions = {
+  //   'client-id':
+  //     'AXLHpeUeZPLYk765IQYienN5jILEDHdrZZ9uXWN8Nu1hH6RPhQDVFHL18ZFakFakHJ4CJ_YilNHRLfau',
+  //   currency: 'USD',
+  //   intent: 'capture',
+  //   'data-client-token': 'abc123xyz==',
+  // };
   return (
     <aside
       className="block col-1"
@@ -39,41 +51,71 @@ const Basket = (props) => {
           </div>
         </Box>
       ))}
-      {cartItems.length !== 0 && (
-        <div>
-          <hr></hr>
-          <div className="row">
-            <div className="col-2">Item Price</div>
-            <div className="col-1 text-right">${itemsPrice.toFixed(2)}</div>
-          </div>
-          <div className="row">
-            <div className="col-2">Tax Price</div>
-            <div className="col-1 text-right">${taxPrice.toFixed(2)}</div>
-          </div>
-          <div className="row">
-            <div className="col-2">Shipping Price</div>
-            <div className="col-1 text-right">${shippingPrice.toFixed(2)}</div>
-          </div>
-          <div className="row">
-            <div className="col-2">Total Price</div>
-            <div className="col-1 text-right">${totalPrice.toFixed(2)}</div>
-          </div>
+      <>
+        {cartItems.length !== 0 && (
+          <div>
+            <hr></hr>
+            <div className="row">
+              <div className="col-2">Item Price</div>
+              <div className="col-1 text-right">${itemsPrice.toFixed(2)}</div>
+            </div>
+            <div className="row">
+              <div className="col-2">Tax Price</div>
+              <div className="col-1 text-right">${taxPrice.toFixed(2)}</div>
+            </div>
+            <div className="row">
+              <div className="col-2">Shipping Price</div>
+              <div className="col-1 text-right">
+                ${shippingPrice.toFixed(2)}
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-2">Total Price</div>
+              <div className="col-1 text-right">${totalPrice.toFixed(2)}</div>
+            </div>
 
-          <hr />
-          <div className="row">
-            {/* <button onClick={() => alert('Implement Checkout')}>
+            <hr />
+
+            {/* <div className="row">
+              <button onClick={() => alert('Implement Checkout')}>
               Check Out
-            </button> */}
+            </button>
             <Button
               variant="outlined"
               color="secondary"
-              onClick={() => alert('Implement Checkout')}
+              onClick={() => {
+                setCheckout(true);
+              }}
             >
               Check Out
             </Button>
+              
+            </div> */}
+            <PayPalButton
+              options={{
+                clientId:
+                  'AXLHpeUeZPLYk765IQYienN5jILEDHdrZZ9uXWN8Nu1hH6RPhQDVFHL18ZFakFakHJ4CJ_YilNHRLfau',
+                currency: 'USD',
+              }}
+              amount={totalPrice}
+              onSuccess={(details, data) => {
+                alert(
+                  'Transaction completed by ' + details.payer.name.given_name
+                );
+                console.log({ details, data });
+
+                // OPTIONAL: Call your server to save the transaction
+                // return fetch('/paypal-transaction-complete', {
+                //   method: 'post',
+                //   body: JSON.stringify({
+                //     orderId: data.orderID,
+                //   }),
+                // });
+              }}
+            />
           </div>
-        </div>
-      )}
+        )}
+      </>
     </aside>
   );
 };

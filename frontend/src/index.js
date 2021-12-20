@@ -6,10 +6,15 @@ import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './contexts/AuthContext';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
+
+
+
 ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
-      <App />
+      
+        <App />
+      
     </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root')
