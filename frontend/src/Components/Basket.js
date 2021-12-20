@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { Box, Button } from '@material-ui/core';
+import React from 'react';
+import { Box } from '@material-ui/core';
 import { PayPalButton } from 'react-paypal-button-v2';
-// import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 
 const Basket = (props) => {
   const { cartItems, onAdd, onRemove } = props;
@@ -9,7 +8,6 @@ const Basket = (props) => {
   const taxPrice = itemsPrice * 0.14;
   const shippingPrice = itemsPrice > 2000 ? 0 : 50;
   const totalPrice = itemsPrice + taxPrice + shippingPrice;
-  // const [checkout, setCheckout] = useState(false);
 
   // const initialOptions = {
   //   'client-id':
@@ -103,14 +101,6 @@ const Basket = (props) => {
                   'Transaction completed by ' + details.payer.name.given_name
                 );
                 console.log({ details, data });
-
-                // OPTIONAL: Call your server to save the transaction
-                // return fetch('/paypal-transaction-complete', {
-                //   method: 'post',
-                //   body: JSON.stringify({
-                //     orderId: data.orderID,
-                //   }),
-                // });
               }}
             />
           </div>
